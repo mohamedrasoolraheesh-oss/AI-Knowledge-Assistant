@@ -1,0 +1,11 @@
+flask
+streamlit
+requests
+python-dotenv
+reportlab
+pypdf
+langchain
+langchain-community
+sentence-transformers
+chromadb
+ollama

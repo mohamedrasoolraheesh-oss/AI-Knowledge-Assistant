@@ -11,20 +11,46 @@ export default function Home() {
     },
   ]);
 
-  const askQuestion = () => {
-    if (!question.trim()) return;
+  const askQuestion = async () => {
+  if (!question.trim()) return;
+
+  const currentQuestion = question;
+
+  setQuestion("");
+
+  try {
+    const response = await fetch(
+      "http://127.0.0.1:8000/ask",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          question: currentQuestion,
+        }),
+      }
+    );
+
+    const data = await response.json();
 
     setMessages([
       ...messages,
       {
-        user: question,
-        ai: `AI response for: ${question}`,
+        user: currentQuestion,
+        ai: data.answer,
       },
     ]);
-
-    setQuestion("");
-  };
-
+  } catch {
+    setMessages([
+      ...messages,
+      {
+        user: currentQuestion,
+        ai: "Cannot connect to backend",
+      },
+    ]);
+  }
+};
   const suggestedQuestion = (text: string) => {
     setQuestion(text);
   };
